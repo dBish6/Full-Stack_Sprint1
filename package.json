@@ -5,19 +5,24 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "watch": "nodemon"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dBish6/Full-Stack_Sprint1.git"
   },
-  "author": "David Bishop, Jacob Pritchett, Alex Frizzell",
+  "author": "David Bishop",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/dBish6/Full-Stack_Sprint1/issues"
   },
   "homepage": "https://github.com/dBish6/Full-Stack_Sprint1#readme",
   "dependencies": {
-    "moment": "^2.29.3"
+    "crc": "^4.1.1",
+    "moment": "^2.29.3",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }
