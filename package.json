@@ -1,0 +1,23 @@
+{
+  "name": "full-stack_sprint1",
+  "version": "1.0.0",
+  "description": "Semester 3 Full-Stack sprint 1 project.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dBish6/Full-Stack_Sprint1.git"
+  },
+  "author": "David Bishop, Jacob Pritchett, Alex Frizzell",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dBish6/Full-Stack_Sprint1/issues"
+  },
+  "homepage": "https://github.com/dBish6/Full-Stack_Sprint1#readme",
+  "dependencies": {
+    "moment": "^2.29.3"
+  }
+}
