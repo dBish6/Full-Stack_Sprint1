@@ -1,6 +1,15 @@
-// just copyied from node week 7 for a gerneral idea of what to do\\
-// just copyied from node week 7 for a gerneral idea of what to do\\
-// just copyied from node week 7 for a gerneral idea of what to do\\
+/* Config.js
+Config functions
+
+
+Authors: David Bishop, Jacob Pritchett,
+Alex Frizzell
+Created Date: June 21, 2022
+Updates:
+Date, Author, Description
+June 21, 2022 Alex Frizzell Config Functions
+
+*/
 
 const fs = require('fs');
 const fsPromise = require('fs').promises;
