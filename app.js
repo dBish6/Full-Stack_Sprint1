@@ -44,7 +44,7 @@ switch (slicedArgs[0]) {
   case "config":
   case "c":
     console.log(slicedArgs[0], " - display the configuration file");
-    //  configApp();
+    // configApp();
     break;
   case "token":
   case "t":
