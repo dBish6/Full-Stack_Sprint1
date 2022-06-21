@@ -1,3 +1,7 @@
+// just copyied from node week 7 for a gerneral idea of what to do\\
+// just copyied from node week 7 for a gerneral idea of what to do\\
+// just copyied from node week 7 for a gerneral idea of what to do\\
+
 const fs = require('fs');
 const fsPromise = require('fs').promises;
 const path = require('path');
@@ -6,7 +10,7 @@ const {configJson, tokenText, configText, initText} = require('./templates')
 
 // Add logging to the CLI project by using eventLogging
 // load the logEvents module
-const logEvents = require('./logEvents');
+const logEvents = require('./logEvent');
 
 // define/extend an EventEmitter class
 const EventEmitter = require('events');
