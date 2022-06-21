@@ -15,7 +15,20 @@ const fs = require('fs');
 const fsPromise = require('fs').promises;
 const path = require('path');
 
-const {configJson, configText, initText} = require('./templates')
+const {configJson, tokenText, configText, initText} = require('./templates')
+
+// Add logging to the CLI project by using eventLogging
+// load the logEvents module
+const logEvents = require('./logEvents');
+
+// define/extend an EventEmitter class
+const EventEmitter = require('events');
+class MyEmitter extends EventEmitter {};
+
+// initialize an new emitter object
+const myEmitter = new MyEmitter();
+// add the listener for the logEvent
+myEmitter.on('log', (event, level, msg) => logEvents(event, level, msg));
 
 function initializeApp() {
 
@@ -47,13 +60,21 @@ const myArgs = process.argv.slice(2);
 
 function createInit() {
     if(fs.existsSync(path.join(__dirname, './views'))) {
+        myEmitter.emit('log', 'init.createFolders()', 'INFO', 'View folder already existed.');
         fs.writeFile(path.join(__dirname, 'views', 'init.txt'), initText, (err) => {
             if(err) console.log(err);
             else if(DEBUG) console.log('Data written to init.txt file');
+            myEmitter.emit('log', 'init.createInitText()', 'INFO', 'Created init text file.');
         });
         fs.writeFile(path.join(__dirname, 'views', 'config.txt'), configText, (err) => {
             if(err) console.log(err);
             else if(DEBUG) console.log('Data written to config.txt file');
+            myEmitter.emit('log', 'init.createConfigText()', 'INFO', 'Created config text file.');
+        });
+        fs.writeFile(path.join(__dirname, 'views', 'token.txt'), tokenText, (err) => {
+            if(err) console.log(err);
+            else if(DEBUG) console.log('Data written to token.txt file');
+            myEmitter.emit('log', 'init.createTokenText()', 'INFO', 'Created token text file.');
         });
     } else {
         fs.mkdir(path.join(__dirname, 'views'), (err) => {
