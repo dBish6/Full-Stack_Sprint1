@@ -15,7 +15,7 @@ const fs = require('fs');
 const fsPromise = require('fs').promises;
 const path = require('path');
 
-const {configJson, configText, initText} = require('./templates')
+const {configJson, configText, initText} = require('./templates/templates')
 
 function initializeApp() {
 
@@ -66,8 +66,8 @@ function createInit() {
 function createConfig() {
     try {
         let data = JSON.stringify(configJson, null, 2);
-        if(!fs.existsSync(path.join(__dirname, 'config.json'))) {
-            fs.writeFile('config.json', data, (err) => {
+        if(!fs.existsSync(path.join(__dirname, './json'))) {
+            fs.writeFile('json', 'config.json', data, (err) => {
                 if(DEBUG) console.log('Data written to config.json file');
             });
         } else {

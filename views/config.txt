@@ -1,10 +1,8 @@
 
-config txt:
-
 app config <command>
 
-List of all available configuration commands:
+Usage:
 
-app config --show             displays a list of the current config settings.
-app config --reset            resets the config file with default settings.
-app config --set              sets a specific config setting.
+app config --show             displays a list of the current config settings
+app config --reset            resets the config file with default settings
+app config --set              sets a specific config setting
