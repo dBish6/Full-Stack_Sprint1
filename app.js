@@ -25,7 +25,7 @@ myEmitter.addListener("log", (msg, level, logName) =>
   logEvent(msg, level, logName)
 );
 
-// const { initializeApp } = require("./init.js");
+const { initializeApp } = require("./init");
 const { configApp } = require("./config");
 // const { tokenApp } = require("./token.js");
 
@@ -41,7 +41,7 @@ switch (slicedArgs[0]) {
   case "init":
   case "i":
     if (DEBUG) console.log(slicedArgs[0], " - initialize the app.");
-    //  initializeApp();
+    initializeApp();
     break;
   case "config":
   case "c":
