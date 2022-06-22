@@ -26,29 +26,31 @@ myEmitter.addListener("log", (msg, level, logName) =>
 );
 
 // const { initializeApp } = require("./init.js");
-// const { configApp } = require("./config.js");
+const { configApp } = require("./config");
 // const { tokenApp } = require("./token.js");
 
 global.DEBUG = true;
 
+// Can make global
 const slicedArgs = process.argv.slice(2); // Creates a new array sliced at the the 3rd arguemnt; Ex: [ 'node', 'app', 'help' ] - the 3rd argument.
+// 3rd and beyond args to the console, if DEBUG is changed to true:
 if (DEBUG) console.log("the app's sliced args: ", slicedArgs);
 
 // Switch statements at the first argument of our new sliced array.
 switch (slicedArgs[0]) {
   case "init":
   case "i":
-    console.log(slicedArgs[0], " - initialize the app.");
+    if (DEBUG) console.log(slicedArgs[0], " - initialize the app.");
     //  initializeApp();
     break;
   case "config":
   case "c":
-    console.log(slicedArgs[0], " - display the configuration file");
-    //  configApp();
+    if (DEBUG) console.log(slicedArgs[0], " - display the configuration file.");
+    configApp();
     break;
   case "token":
   case "t":
-    console.log(slicedArgs[0], " - generate a user token");
+    if (DEBUG) console.log(slicedArgs[0], " - generate a user token.");
     //  tokenApp();
     break;
   case "help":
