@@ -1,8 +1,12 @@
 
-app init <command>
-
 Usage:
 
-app init --all          creates the folder structure and config file
-app init --mk           creates the folder structure and add usage files
-app init --cat          creates the config file with default settings
+app init <command>
+
+List of all available initialization commands:
+
+app init help           Shows the usage file that was created for help.
+app init --all          Creates the folder structure, usage files and config file.
+app init --init         Creates the folder structure and add usage files.
+app init --cat          Creates the config file with the default settings.
+app init --undo         Deletes the usage files and config file.

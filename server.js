@@ -32,27 +32,27 @@ const server = http.createServer((req, res) => {
   console.log(req.method, req.url);
 
   if (req.url === "/") {
-    let htmlPath = path.join(__dirname, "views", "index.html");
+    let htmlPath = path.join(__dirname, "public", "index.html");
     res.statusCode = 200;
     myEmitter.emit("log", `${req.method}\t${req.url}`, "INFO", "reqLog.log");
     displayFile(htmlPath);
   } else if (req.url === "/form") {
-    let htmlPath = path.join(__dirname, "views", "form.html");
+    let htmlPath = path.join(__dirname, "public", "form.html");
     res.statusCode = 200;
     myEmitter.emit("log", `${req.method}\t${req.url}`, "INFO", "reqLog.log");
     displayFile(htmlPath);
     // Matches the req.url with the existing req.url if the extension name is ".css".
   } else if (req.url.match(".css$")) {
-    var cssPath = path.join(__dirname, req.url); // For some reason it just goes to public anyways... becasue the req.url has /public in it.
+    let cssPath = path.join(__dirname, req.url); // For some reason it just goes to public anyways... becasue the req.url has /public in it.
     // createReadStream is like readFileSync, but I've heard people use createReadStream for bigger files.. just wanted to do something different.
-    var fileStream = fs.createReadStream(cssPath, "UTF-8");
+    let fileStream = fs.createReadStream(cssPath, "UTF-8");
     res.writeHead(200, { "Content-Type": "text/css" });
     myEmitter.emit("log", `${req.method}\t${req.url}`, "INFO", "reqLog.log");
-    //
+    // Pipe listens from a readStream and "pipes" it to a writeSteam.
     fileStream.pipe(res);
   } else if (req.url.match(".png$")) {
-    var imagePath = path.join(__dirname, req.url);
-    var fileStream = fs.createReadStream(imagePath);
+    let imagePath = path.join(__dirname, req.url);
+    let fileStream = fs.createReadStream(imagePath);
     res.writeHead(200, { "Content-Type": "image/png" });
     fileStream.pipe(res);
 
