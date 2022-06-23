@@ -1,10 +1,9 @@
 /* App.js
    The Main Cmd line to call the list of commands for init, config, etc.
 
-   To see the list of commands type "app help" in the console.
+   To see the list of all commands type "node app help" in the console.
 
-   Authors: David Bishop, Jacob Pritchett,
-   Alex Frizzell
+   Authors: David Bishop, Jacob Pritchett, Alex Frizzell
    Created Date: June 16, 2022
    Updates:
    Date, Author, Description
@@ -25,14 +24,14 @@ myEmitter.addListener("log", (msg, level, logName) =>
   logEvent(msg, level, logName)
 );
 
-const { initializeApp } = require("./init");
-const { configApp } = require("./config");
+const initializeApp = require("./init");
+const configApp = require("./config");
 // const { tokenApp } = require("./token.js");
 
 global.DEBUG = true;
 
 // Can make global
-const slicedArgs = process.argv.slice(2); // Creates a new array sliced at the the 3rd arguemnt; Ex: [ 'node', 'app', 'help' ] - the 3rd argument.
+const slicedArgs = process.argv.slice(2); // Creates a new array sliced at the the 3rd arguemnt; Ex: [ 'node', 'app', 'help' ] -> [ 'help' ] - the 3rd argument.
 // 3rd and beyond args to the console, if DEBUG is changed to true:
 if (DEBUG) console.log("the app's sliced args: ", slicedArgs);
 
@@ -55,7 +54,7 @@ switch (slicedArgs[0]) {
     break;
   case "help":
     // Reads info.txt and log the files text to the console. Also, emits an error if any.
-    fs.readFile(path.join(__dirname, "views", "info.txt"), (err, data) => {
+    fs.readFile(path.join(__dirname, "public", "info.txt"), (err, data) => {
       if (err) {
         myEmitter.emit(
           "log",
@@ -68,6 +67,5 @@ switch (slicedArgs[0]) {
       console.log(data.toString());
     });
   default:
-    console.log("");
     console.log(`type "node app help" for additional information.`);
 }

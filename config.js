@@ -1,22 +1,20 @@
 /* Config.js
-   The configuration part of the cmd line, which is the second argument.
+   The configuration part of the cmd line.
    Houses all config functions
 
-   To see the list of commands type "app help" in the console.
+   To see the list of commands type "node app config help" in the console.
 
-   Authors: David Bishop, Jacob Pritchett,
-   Alex Frizzell
+   Authors: David Bishop, Jacob Pritchett, Alex Frizzell
    Created Date: June 21, 2022
    Updates:
    Date, Author, Description
-   June 21, 2022 Alex Frizzell implemented Config Functions.
+   June 21, 2022, Alex, implemented Config App.
+   June 22, 2022, David, Fixed application interface, created all config functions with fsPromises, and events
 
 */
 
-// MAKE A functLog.log
-
 const fs = require("fs");
-const fsPromise = require("fs").promises;
+const fsPromises = require("fs").promises;
 const path = require("path");
 
 const EventEmitter = require("events");
@@ -29,31 +27,23 @@ myEmitter.addListener("log", (msg, level, logName) =>
   logEvent(msg, level, logName)
 );
 
-const { configJson } = require("./templates/templates");
+const slicedArgs = process.argv.slice(2);
 
 const configApp = () => {
-  const slicedArgs = process.argv.slice(2);
-  // Use this line of code to send the 3rd and beyond args to the console
-  // if(myArgs.length > 1) console.log('the init.args: ', myArgs);
   switch (slicedArgs[1]) {
     case "--show":
-      //   displayConfig();
-      if (DEBUG) console.log("configApp.Show() --show");
+      if (DEBUG) console.log("configApp.displayConfig() --show");
+      displayConfig();
       break;
     case "--reset":
-      //   resetConfig();
-      if (DEBUG) console.log("configApp.Reset() --reset");
+      if (DEBUG) console.log("configApp.resetConfig() --reset");
+      resetConfig();
       break;
-    case "--set":
-      //   setConfig();
-      if (DEBUG) console.log("configApp.Set() --set");
+    case "--alter":
+      if (DEBUG) console.log("configApp.alterConfig() --set");
+      alterConfig();
       break;
-    case "--help":
-      //   setConfig();
-      if (DEBUG) console.log("configApp.Set() --set");
-      break;
-    default:
-      if (DEBUG) console.log("configApp - default");
+    case "help":
       fs.readFile(path.join(__dirname, "views", "config.txt"), (err, data) => {
         if (err) {
           myEmitter.emit(
@@ -66,58 +56,114 @@ const configApp = () => {
         }
         console.log(data.toString());
       });
+      break;
+    default:
+      console.log(`type "node app config help" for additional information.`);
   }
 };
 
-// Just shows the config.json in the console.
-function displayConfig() {
-  if (DEBUG) console.log("config.displayConfig()");
-  fs.readFile(__dirname + "/config.json", (error, data) => {
-    if (error) throw error;
-    console.log(JSON.parse(data));
-  });
-}
+// Just reads the config.json file asynchronously and shows the it in the console.
+const displayConfig = async () => {
+  try {
+    if (DEBUG) console.log("Made it to: displayConfig()");
 
-// Just writes over it again with "configdata" template.
-function resetConfig() {
-  if (DEBUG) console.log("config.resetConfig()");
-  // You need to change it to a string instead of JSON sturture to right it do disk.
-  let configdata = JSON.stringify(configJson, null, 2);
-  fs.writeFile(__dirname + "/config.json", configdata, (error) => {
-    if (error) throw error;
-    if (DEBUG) console.log("Config file reset to original state");
-  });
-}
+    const readJson = await fsPromises.readFile(
+      path.join(__dirname, "json", "config.json")
+    );
+    // Parse just changes a JSON string to javaScript objects.
+    console.log(JSON.parse(readJson));
+  } catch (err) {
+    myEmitter.emit(
+      "log",
+      `${err.name}:\t${err.message}`,
+      "ERROR",
+      "errLog.log"
+    );
+    console.error(err);
+  }
+};
 
-// Changes selected object key to whatever text in config.json.
-function setConfig() {
-  if (DEBUG) console.log("config.setConfig()");
-  if (DEBUG) console.log(myArgs);
-  let match = false;
-  fs.readFile(__dirname + "/config.json", (error, data) => {
-    if (error) throw error;
-    if (DEBUG) console.log(JSON.parse(data));
-    // To work with JSON basically you have to parse it to JSON object, also a array like myArgs.
-    let cfg = JSON.parse(data);
+// Requring the templete which is in javaScript object form.
+const { configJSON } = require("./templates/templates");
+
+// Just writes over config.json again with "configJSON" template asynchronously.
+const resetConfig = async () => {
+  try {
+    if (DEBUG) console.log("Made it to: displayConfig()");
+
+    // stringify changes it to a JSON string instead of javaScript objects form to be able to write JSON disk.
+    let configdata = JSON.stringify(configJSON, null, 2);
+    await fsPromises.writeFile(
+      path.join(__dirname, "json", "config.json"),
+      configdata
+    );
+    myEmitter.emit(
+      "log",
+      "resetConfig(); Config file was reset to it's default state.",
+      "INFO",
+      "functLog.log"
+    );
+    console.log("config.json was reset.");
+  } catch (err) {
+    myEmitter.emit(
+      "log",
+      `${err.name}:\t${err.message}`,
+      "ERROR",
+      "errLog.log"
+    );
+    console.error(err);
+  }
+};
+
+// Changes selected object key to whatever value in config.json.
+const alterConfig = async () => {
+  try {
+    if (DEBUG) console.log("config.alterConfig()");
+    if (DEBUG) console.log(slicedArgs);
+
+    let match = false;
+
+    let json = await fsPromises.readFile(
+      path.join(__dirname, "json", "config.json")
+    );
+    // To work with JSON basically you have to parse it to JSON object, also is a array.
+    let cfg = JSON.parse(json);
     // To find a curtain object(element) in config.json.
     // Key value pairs; main is a key and 'app.js' is the value.
     for (let key of Object.keys(cfg)) {
       // If key exists...
-      if (key === myArgs[2]) {
-        cfg[key] = myArgs[3];
+      if (key === slicedArgs[2]) {
+        cfg[key] = slicedArgs[3];
         match = true;
       }
     }
+    // if match is still false...
     if (!match) {
-      console.log(`invalid key: ${myArgs[2]}, try another.`);
+      console.log(`invalid key: ${slicedArgs[2]}, try another.`);
     }
-    if (DEBUG) console.log(cfg);
-    data = JSON.stringify(cfg, null, 2);
-    fs.writeFile(__dirname + "/config.json", data, (error) => {
-      if (error) throw error;
-      if (DEBUG) console.log("Config file successfully updated.");
-    });
-  });
-}
+    console.log(cfg);
+
+    json = JSON.stringify(cfg, null, 2);
+    await fsPromises.writeFile(
+      path.join(__dirname, "json", "config.json"),
+      json
+    );
+    myEmitter.emit(
+      "log",
+      `alterConfig(); ${slicedArgs[2]} key was changed to ${slicedArgs[3]}.`,
+      "INFO",
+      "functLog.log"
+    );
+    console.log(`${slicedArgs[2]} key was changed to desired value.`);
+  } catch (err) {
+    myEmitter.emit(
+      "log",
+      `${err.name}:\t${err.message}`,
+      "ERROR",
+      "errLog.log"
+    );
+    console.error(err);
+  }
+};
 
 module.exports = configApp;

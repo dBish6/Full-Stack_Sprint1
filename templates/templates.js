@@ -11,27 +11,34 @@ June 21, 2022 Alex Frizzell main CLI templates
 
 */
 
-let initText = `
+const initText = `
+Usage:
+
 app init <command>
 
-Usage:
+List of all available initialization commands:
 
-app init --all          creates the folder structure and config file
-app init --mk           creates the folder structure and add usage files
-app init --cat          creates the config file with default settings
+app init help           Shows the usage file that was created for help.
+app init --all          Creates the folder structure, usage files and config file.
+app init --init         Creates the folder structure and add usage files.
+app init --cat          Creates the config file with the default settings.
+app init --undo         Deletes the usage files and config file.
 `;
 
-let configText = `
+const configText = `
+Usage:
+
 app config <command>
 
-Usage:
+List of all available configuration commands:
 
-app config --show             displays a list of the current config settings
-app config --reset            resets the config file with default settings
-app config --set              sets a specific config setting
+app config --show            displays a list of the current config settings.
+app config --reset                resets the config file with default settings.
+app config --alter <key> <value>        sets a specific config setting.
+app token --count                       displays a count of the tokens created.
 `;
 
-const configJson = {
+const configJSON = {
   name: "AppConfigCLI",
   description: "The Command Line Interface (CLI) for the App.",
   version: "1.0.0",
@@ -42,5 +49,5 @@ const configJson = {
 module.exports = {
   initText,
   configText,
-  configJson,
+  configJSON,
 };
