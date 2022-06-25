@@ -9,7 +9,9 @@
    Updates:
    Date, Author, Description
    June 23, David, Created app interface, created --create, --undo, --count and --new.
-   June 24, David, Fixed new function, generate on web page, --search function.
+   June 24, David, Fixed new function, token generate on web page, --search function.
+   June 25, David, added new parameters to newToke function, fixed token generation 
+   on web page, --alter function
 
 */
 
@@ -31,10 +33,14 @@ myEmitter.addListener("log", (msg, level, logName) =>
   logEvent(msg, level, logName)
 );
 
-const myArgs = process.argv.slice(2);
+const slicedArgs = process.argv.slice(2);
+
+// I have this here also becasue when it is not it says an error,
+// DEBUG is not defined when you create a token from the web page.
+global.DEBUG = true;
 
 const tokenApp = () => {
-  switch (myArgs[1]) {
+  switch (slicedArgs[1]) {
     case "--create":
       if (DEBUG) console.log("tokenApp.tokenFile() --create");
       tokenFile();
@@ -49,20 +55,18 @@ const tokenApp = () => {
       break;
     case "--new":
       if (DEBUG) console.log("tokenApp.newToken() --new");
-      newToken(myArgs[2]);
+      newToken(slicedArgs[2], slicedArgs[3], slicedArgs[4]);
       break;
     case "--search":
       if (DEBUG) console.log("tokenApp.searchToken() --search");
-      searchToken(myArgs[2]);
+      searchToken(slicedArgs[2]);
       break;
-    case "--addphone":
-      if (DEBUG) console.log("tokenApp.Add() --add");
-      break;
-    case "--addemail":
-      if (DEBUG) console.log("tokenApp.Add() --add");
+    case "--alter":
+      if (DEBUG) console.log("tokenApp.alterToken() --alter");
+      alterToken(slicedArgs[2]);
       break;
     case "help":
-      fs.readFile(path.join(__dirname, "views", "config.txt"), (err, data) => {
+      fs.readFile(path.join(__dirname, "views", "token.txt"), (err, data) => {
         if (err) {
           myEmitter.emit(
             "log",
@@ -92,7 +96,7 @@ const tokenFile = async () => {
 
     myEmitter.emit(
       "log",
-      "tokenFile(); token.json file was created.",
+      "tokenFile(); tokens.json file was created.",
       "INFO",
       "functLog.log"
     );
@@ -167,19 +171,20 @@ const tokenCount = async () => {
   }
 };
 
-const newToken = async (username) => {
+// Writes a newtoken with the newToken template with the given parameters; username, email, phone.
+const newToken = async (username, email, phone) => {
+  let newToken = JSON.parse(`{
+    "created": "1969-01-31",
+    "username": "username",
+    "email": "user@example.com",
+    "phone": "5556597890",
+    "token": "token",
+    "expires": "1969-02-03",
+    "confirmed": "tbd"
+  }`);
   try {
     if (DEBUG) console.log("Made it to: token.newToken()");
 
-    let newToken = JSON.parse(`{
-   "created": "1969-01-31",
-   "username": "username",
-   "email": "user@example.com",
-   "phone": "5556597890",
-   "token": "token",
-   "expires": "1969-02-03",
-   "confirmed": "tbd"
-}`);
     if (DEBUG) console.log("JSON.parse()");
 
     const dateNow = moment().format("YYYY-MM-DD");
@@ -187,16 +192,19 @@ const newToken = async (username) => {
 
     newToken.created = dateNow;
     newToken.username = username;
+    newToken.email = email;
+    newToken.phone = phone;
     newToken.token = crc32(username).toString();
     newToken.expires = expireDate;
 
+    // If the token.js file is empty...
     if (
       fs.readFileSync(path.join(__dirname, "json", "tokens.json"), "utf-8") ==
       ""
     ) {
       let tokens = [];
       tokens.push(newToken);
-      // stringify changes it to a JSON string instead of javaScript objects form to be able to write JSON disk.
+
       userTokens = JSON.stringify(tokens, null, 2);
 
       await fsPromises.writeFile(
@@ -235,11 +243,13 @@ const newToken = async (username) => {
     );
     console.error(err);
   }
-  //   return newToken.token;
+  return newToken;
 };
 
+// Searches for a token by the given username.
 const searchToken = async (username) => {
   try {
+    if (DEBUG) console.log("Made it to: token.searchToken()");
     const data = await fsPromises.readFile(
       path.join(__dirname, "json", "tokens.json")
     );
@@ -247,6 +257,14 @@ const searchToken = async (username) => {
     json = JSON.parse(data);
 
     let finder = json.find((data) => data.username == username);
+
+    myEmitter.emit(
+      "log",
+      `searchToken(); function was fired, diplaying requested token to console.`,
+      "INFO",
+      "functLog.log"
+    );
+
     console.log(finder);
     if (finder === undefined) {
       console.log("");
@@ -263,81 +281,59 @@ const searchToken = async (username) => {
   }
 };
 
-const tokenAddEmail = async () => {
+const alterToken = async (username) => {
   try {
-  } catch (err) {}
+    if (DEBUG) console.log("token.alterToken()");
+
+    let match = false;
+
+    // const data = await fsPromises.readFile(
+    //   path.join(__dirname, "json", "tokens.json")
+    // );
+
+    // json = JSON.parse(data);
+
+    let json = await fsPromises.readFile(
+      path.join(__dirname, "json", "tokens.json")
+    );
+    // To work with JSON basically you have to parse it to JSON object, also is a array.
+    let token = JSON.parse(json);
+    // Finds the token with the given username.
+    let finder = token.find((data) => data.username == username);
+
+    // Key value pairs...
+    for (let key of Object.keys(finder)) {
+      // If key exists...
+      if (key === slicedArgs[3]) {
+        finder[key] = slicedArgs[4];
+      }
+    }
+    console.log(finder);
+
+    json = JSON.stringify(token, null, 2);
+    await fsPromises.writeFile(
+      path.join(__dirname, "json", "tokens.json"),
+      json
+    );
+    myEmitter.emit(
+      "log",
+      `alterToken(); ${slicedArgs[3]} key was changed to ${slicedArgs[4]}.`,
+      "INFO",
+      "functLog.log"
+    );
+    console.log(`${slicedArgs[3]} key was changed to desired value.`);
+  } catch (err) {
+    myEmitter.emit(
+      "log",
+      `${err.name}:\t${err.message}`,
+      "ERROR",
+      "errLog.log"
+    );
+    console.error(err);
+  }
 };
 
-// const websiteToken = async () => {
-//   try {
-//     const btn = document.querySelector("#btn");
-
-//     btn.addEventListener("click", () => {
-//       if (DEBUG) console.log("Made it to: token.newToken()");
-
-//     let newToken = JSON.parse(`{
-//    "created": "1969-01-31",
-//    "username": "username",
-//    "email": "user@example.com",
-//    "phone": "5556597890",
-//    "token": "token",
-//    "expires": "1969-02-03",
-//    "confirmed": "tbd"
-// }`);
-
-//     const dateNow = moment().format("YYYY-MM-DD");
-//     const expireDate = moment().add(4, "days").format("YYYY-MM-DD");
-
-//     let username = document.querySelector("#name").value;
-//     let email = document.querySelector("#email").value;
-//     let phoneNum = document.querySelector("#phone").value;
-
-//     newToken.created = dateNow;
-//     newToken.username = username;
-//     newToken.email = email;
-//     newToken.phone = phoneNum;
-//     newToken.token = crc32(username).toString();
-//     newToken.expires = expireDate;
-
-//     if (
-//       fs.readFileSync(path.join(__dirname, "json", "tokens.json"), "utf-8") ==
-//       ""
-//     ) {
-//       let tokens = [];
-//       tokens.push(newToken);
-//       // stringify changes it to a JSON string instead of javaScript objects form to be able to write JSON disk.
-//       userTokens = JSON.stringify(tokens, null, 2);
-
-//       await fsPromises.writeFile(
-//         path.join(__dirname, "json", "tokens.json"),
-//         userTokens
-//       );
-//     } else {
-//       const data = await fsPromises.readFile(
-//         path.join(__dirname, "json", "tokens.json")
-//       );
-//       let tokens = JSON.parse(data);
-
-//       tokens.push(newToken);
-
-//       userTokens = JSON.stringify(tokens, null, 2);
-
-//       await fsPromises.writeFile(
-//         path.join(__dirname, "json", "tokens.json"),
-//         userTokens
-//       );
-//     }
-//     });
-
-//   } catch (err) {
-//     myEmitter.emit(
-//       "log",
-//       `${err.name}:\t${err.message}`,
-//       "ERROR",
-//       "errLog.log"
-//     );
-//     console.error(err);
-//   }
-// };
-
-module.exports = tokenApp;
+module.exports = {
+  tokenApp,
+  newToken,
+};

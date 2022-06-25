@@ -41,7 +41,7 @@ const configApp = () => {
       resetConfig();
       break;
     case "--alter":
-      if (DEBUG) console.log("configApp.alterConfig() --set");
+      if (DEBUG) console.log("configApp.alterConfig() --alter");
       alterConfig();
       break;
     case "help":
@@ -120,7 +120,6 @@ const resetConfig = async () => {
 const alterConfig = async () => {
   try {
     if (DEBUG) console.log("config.alterConfig()");
-    if (DEBUG) console.log(slicedArgs);
 
     let match = false;
 
@@ -135,13 +134,7 @@ const alterConfig = async () => {
       // If key exists...
       if (key === slicedArgs[2]) {
         cfg[key] = slicedArgs[3];
-        // Don't work
-        match = true;
       }
-    }
-    // if match is still false...
-    if (!match) {
-      console.log(`invalid key: ${slicedArgs[2]}, try another.`);
     }
     console.log(cfg);
 

@@ -26,7 +26,7 @@ myEmitter.addListener("log", (msg, level, logName) =>
 
 const initializeApp = require("./init");
 const configApp = require("./config");
-const tokenApp = require("./token.js");
+const { tokenApp } = require("./token.js");
 
 global.DEBUG = true;
 
