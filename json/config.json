@@ -2,6 +2,6 @@
   "name": "AppConfigCLI",
   "description": "The Command Line Interface (CLI) for the App.",
   "version": "1.0.0",
-  "main": "ass.js",
+  "main": "app.js",
   "superuser": "adm1n"
 }

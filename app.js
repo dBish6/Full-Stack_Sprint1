@@ -26,7 +26,7 @@ myEmitter.addListener("log", (msg, level, logName) =>
 
 const initializeApp = require("./init");
 const configApp = require("./config");
-// const { tokenApp } = require("./token.js");
+const tokenApp = require("./token.js");
 
 global.DEBUG = true;
 
@@ -50,7 +50,7 @@ switch (slicedArgs[0]) {
   case "token":
   case "t":
     if (DEBUG) console.log(slicedArgs[0], " - generate a user token.");
-    //  tokenApp();
+    tokenApp();
     break;
   case "help":
     // Reads info.txt and log the files text to the console. Also, emits an error if any.
@@ -66,6 +66,7 @@ switch (slicedArgs[0]) {
       }
       console.log(data.toString());
     });
+    break;
   default:
-    console.log(`type "node app help" for additional information.`);
+    console.log(`Type "node app help" for additional information.`);
 }

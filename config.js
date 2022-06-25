@@ -29,6 +29,7 @@ myEmitter.addListener("log", (msg, level, logName) =>
 
 const slicedArgs = process.argv.slice(2);
 
+// Make an undo.
 const configApp = () => {
   switch (slicedArgs[1]) {
     case "--show":
@@ -58,7 +59,7 @@ const configApp = () => {
       });
       break;
     default:
-      console.log(`type "node app config help" for additional information.`);
+      console.log(`Type "node app config help" for additional information.`);
   }
 };
 
@@ -134,6 +135,7 @@ const alterConfig = async () => {
       // If key exists...
       if (key === slicedArgs[2]) {
         cfg[key] = slicedArgs[3];
+        // Don't work
         match = true;
       }
     }

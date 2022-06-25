@@ -1,22 +1,9 @@
-/* Templates.js
-init for command line
-
-
-Authors: David Bishop, Jacob Pritchett,
-Alex Frizzell
-Created Date: June 21, 2022
-Updates:
-Date, Author, Description
-June 21, 2022 Alex Frizzell main CLI templates 
-
-*/
-
 const initText = `
 Usage:
 
 app init <command>
 
-List of all available initialization commands:
+List of all Available Initialization Commands:
 
 app init help           Shows the usage file that was created for help.
 app init --all          Creates the folder structure, usage files and config file.
@@ -30,12 +17,26 @@ Usage:
 
 app config <command>
 
-List of all available configuration commands:
+List of all Available Configuration Commands:
 
-app config --show            displays a list of the current config settings.
-app config --reset                resets the config file with default settings.
-app config --alter <key> <value>        sets a specific config setting.
-app token --count                       displays a count of the tokens created.
+app config --show            Displays a list of the current config settings.
+app config --reset                Resets the config file with default settings.
+app config --alter <key> <value>        Sets a specific config setting.
+`;
+
+const tokenText = `
+Usage:
+
+app token <command>
+
+List of all Available Token Commands:
+
+app token --count                           displays a count of the tokens created.
+app token --new <username>                  Generates a token for a given username and saves the token to tokens.json.
+app token --addphone <username> <phone>
+app token --addemail <username> <email>
+app token --search <username>               Logs the token for a given username.
+
 `;
 
 const configJSON = {
@@ -46,8 +47,12 @@ const configJSON = {
   superuser: "adm1n",
 };
 
+const tokenStart = [];
+
 module.exports = {
   initText,
   configText,
   configJSON,
+  tokenText,
+  tokenStart,
 };

@@ -28,11 +28,16 @@ myEmitter.addListener("log", (msg, level, logName) =>
   logEvent(msg, level, logName)
 );
 
-const { configJSON, configText, initText } = require("./templates/templates");
+const {
+  configJSON,
+  configText,
+  initText,
+  tokenText,
+} = require("./templates/templates");
 
-function initializeApp() {
-  const myArgs = process.argv.slice(2);
+const myArgs = process.argv.slice(2);
 
+const initializeApp = () => {
   switch (myArgs[1]) {
     case "--all":
       createInit();
@@ -64,12 +69,13 @@ function initializeApp() {
         }
         console.log(data.toString());
       });
+      break;
     default:
       console.log(
-        `type "node init --init" to create usage files; When created "node init help" for more information.`
+        `Type "node init --init" to create usage files; When created "node init help" for more information.`
       );
   }
-}
+};
 
 const createInit = async () => {
   try {
@@ -87,13 +93,17 @@ const createInit = async () => {
       path.join(__dirname, "views", "config.txt"),
       configText
     );
+    await fsPromises.writeFile(
+      path.join(__dirname, "views", "token.txt"),
+      tokenText
+    );
     myEmitter.emit(
       "log",
       "createInit(); views folder was created if needed; txt files were written to folder.",
       "INFO",
       "functLog.log"
     );
-    console.log("App was initialized");
+    console.log("App was initialized.");
   } catch (err) {
     myEmitter.emit(
       "log",
@@ -121,7 +131,7 @@ const createConfig = async () => {
       "INFO",
       "functLog.log"
     );
-    console.log("Defaulted config.json was created");
+    console.log("Defaulted config.json was created.");
   } catch (err) {
     myEmitter.emit(
       "log",
@@ -153,7 +163,7 @@ const deleteFiles = async () => {
       "INFO",
       "functLog.log"
     );
-    console.log("Files were indeed deleted");
+    console.log("Files were indeed deleted.");
   } catch (err) {
     myEmitter.emit(
       "log",

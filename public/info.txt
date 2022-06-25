@@ -13,16 +13,14 @@ app init --init              Creates the folder structure and add usage files.
 app init --cat               Creates the config file with the default settings.
 app init --undo              Deletes the usage files and config file.
 app config help              Shows the usage file that was created for help.
-app config --show            displays a list of the current config settings.
-app config --reset                resets the config file with default settings.
-app config --alter <key> <value>        sets a specific config setting.
-app token --count                       displays a count of the tokens created.
-app token --new <username>              generates a token for a given username, saves tokens to the json file.
-app token --add p <username> <phone>
-app token --add e <username> <email>
-app token --search u <username>  fetches a token for a given username.
-app token --search e <email>  fetches a token for a given email.
-app token --search p <phone>  fetches a token for a given phone number.
+app config --show            Displays a list of the current config settings.
+app config --reset                Resets the config file with default settings.
+app config --alter <key> <value>        Sets a specific config setting.
+app token --count                       Displays a count of the tokens created.
+app token --new <username>              Generates a token for a given username and saves the token to tokens.json.
+app token --addphone <username> <phone>
+app token --addemail <username> <email>
+app token --search <username>           fetches a token for a given username.
 
 Event Emitters:
 The events format is as follows; dataTime, id, message, and level.
