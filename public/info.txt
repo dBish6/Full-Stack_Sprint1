@@ -16,11 +16,13 @@ app config help              Shows the usage file that was created for help.
 app config --show            Displays a list of the current config settings.
 app config --reset                Resets the config file with default settings.
 app config --alter <key> <value>        Sets a specific config setting.
-app token --count                       Displays a count of the tokens created.
-app token --new <username>              Generates a token for a given username and saves the token to tokens.json.
-app token --addphone <username> <phone>
-app token --addemail <username> <email>
-app token --search <username>           fetches a token for a given username.
+app token help                                Shows the usage file that was initialized.
+app token --create                            Creates an empty token.json file to get started.
+app token --undo                              Deletes the token.json file.          
+app token --count                             displays a count of the tokens created.
+app token --new <username> <email> <phone>    Generates a token for a given username, email, phone and saves the token to tokens.json.
+app token --search <username>                 Logs the token for the given username.
+app token --alter <username> <key> <value>    Changes a specific token value by the given username.
 
 Event Emitters:
 The events format is as follows; dataTime, id, message, and level.
