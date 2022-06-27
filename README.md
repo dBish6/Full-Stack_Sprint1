@@ -1,5 +1,4 @@
 # Full-Stack_Sprint1
-GitHub: https://github.com/dBish6/Full-Stack_Sprint1
 
 Running the Server: 
 npm run watch
