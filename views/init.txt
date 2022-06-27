@@ -1,0 +1,12 @@
+
+Usage:
+
+app init <command>
+
+List of all Available Initialization Commands:
+
+app init help           Shows the usage file that was created.
+app init --all          Creates the folder structure, usage files and config file.
+app init --init         Creates the folder structure and add usage files.
+app init --fig          Creates the config file with the default settings.
+app init --undo         Deletes the usage files and config file.

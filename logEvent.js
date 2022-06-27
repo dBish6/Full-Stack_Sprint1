@@ -27,7 +27,6 @@ const logEvents = async (msg, level, logName) => {
     if (!fs.existsSync(path.join(__dirname, "logs"))) {
       await fsPromises.mkdir(path.join(__dirname, "logs")); // Makes "logs" directory if path does not exist.
     }
-    // __dirname/logs/eventLog.txt
     // __dirname is the absolute path of the directory containing the current executed file.
     await fsPromises.appendFile(
       path.join(__dirname, "logs", logName),

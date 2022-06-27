@@ -72,11 +72,12 @@ const initializeApp = () => {
       break;
     default:
       console.log(
-        `Type "node init --init" to create usage files; When created "node init help" for more information.`
+        `Type "node app init --init" to create usage files; When created "node app init help" for more information.`
       );
   }
 };
 
+// Creates all files asynchronously.
 const createInit = async () => {
   try {
     if (DEBUG) console.log("Made it to: createInit()");

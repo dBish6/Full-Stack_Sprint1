@@ -1,0 +1,11 @@
+
+Usage:
+
+app config <command>
+
+List of all Available Configuration Commands:
+
+app config help              Shows the usage file that was initialized.
+app config --show            Displays a list of the current config settings.
+app config --reset                Resets the config file with default settings.
+app config --alter <key> <value>        Changes a specific config value.

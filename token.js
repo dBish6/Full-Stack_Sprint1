@@ -145,10 +145,6 @@ const tokenCount = async () => {
     const tokenJSON = await fsPromises.readFile(
       path.join(__dirname, "json", "tokens.json")
     );
-    // if (!tokenJSON) {
-    //   console.log("");
-    //   console.log("There are no tokens to be found silly.");
-    // }
     let tokens = JSON.parse(tokenJSON);
 
     let count = Object.keys(tokens).length;
@@ -254,7 +250,7 @@ const searchToken = async (username) => {
       path.join(__dirname, "json", "tokens.json")
     );
 
-    json = JSON.parse(data);
+    let json = JSON.parse(data);
 
     let finder = json.find((data) => data.username == username);
 
@@ -281,17 +277,10 @@ const searchToken = async (username) => {
   }
 };
 
+// Changes selected object key to whatever value in tokens.json.
 const alterToken = async (username) => {
   try {
     if (DEBUG) console.log("token.alterToken()");
-
-    let match = false;
-
-    // const data = await fsPromises.readFile(
-    //   path.join(__dirname, "json", "tokens.json")
-    // );
-
-    // json = JSON.parse(data);
 
     let json = await fsPromises.readFile(
       path.join(__dirname, "json", "tokens.json")

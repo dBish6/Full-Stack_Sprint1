@@ -121,8 +121,6 @@ const alterConfig = async () => {
   try {
     if (DEBUG) console.log("config.alterConfig()");
 
-    let match = false;
-
     let json = await fsPromises.readFile(
       path.join(__dirname, "json", "config.json")
     );

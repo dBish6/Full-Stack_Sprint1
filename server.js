@@ -29,8 +29,6 @@ const { newToken } = require("./token");
 
 const port = 3069;
 
-// Could make server asnyc function and do a try catch.
-//
 const server = http.createServer((req, res) => {
   console.log(req.method, req.url);
 
@@ -92,8 +90,6 @@ const server = http.createServer((req, res) => {
     let fileStream = fs.createReadStream(imagePath);
     res.writeHead(200, { "Content-Type": "image/png" });
     fileStream.pipe(res);
-
-    // Put JavaScript one here.
   } else {
     myEmitter.emit(
       "log",
@@ -106,7 +102,7 @@ const server = http.createServer((req, res) => {
     res.end();
   }
 
-  //
+  // Takes in the path(filename), reads the file and writes it to server.
   function displayFile(filename) {
     fs.readFile(filename, "UTF-8", (err, data) => {
       if (err) {

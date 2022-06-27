@@ -1,0 +1,15 @@
+
+Usage:
+
+app token <command>
+
+List of all Available Token Commands:
+
+app token help                                Shows the usage file that was initialized.
+app token --create                            Creates an empty token.json file to get started.
+app token --undo                              Deletes the token.json file.          
+app token --count                             displays a count of the tokens created.
+app token --new <username> <email> <phone>    Generates a token for a given username, email, phone and saves the token to tokens.json.
+app token --search <username>                 Logs the token for the given username.
+app token --alter <username> <key> <value>    Changes a specific token value by the given username.
+

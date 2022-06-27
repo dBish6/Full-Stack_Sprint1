@@ -1,0 +1,7 @@
+{
+  "name": "AppConfigCLI",
+  "description": "The Command Line Interface (CLI) for the App.",
+  "version": "1.0.0",
+  "main": "tt.js",
+  "superuser": "adm1n"
+}
